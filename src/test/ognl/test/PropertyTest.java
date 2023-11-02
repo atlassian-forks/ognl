@@ -43,7 +43,7 @@ public class PropertyTest extends OgnlTestCase {
             {ROOT, "map[\"te\" + \"st\"]", ROOT},
             {ROOT, "map[(\"s\" + \"i\") + \"ze\"]", ROOT.getMap().get(Root.SIZE_STRING)},
             {ROOT, "map[\"size\"]", ROOT.getMap().get(Root.SIZE_STRING)},
-            {ROOT, "map[@org.ognl.test.objects.Root@SIZE_STRING]", ROOT.getMap().get(Root.SIZE_STRING)},
+            {ROOT, "map[@ognl.test.objects.Root@SIZE_STRING]", ROOT.getMap().get(Root.SIZE_STRING)},
             {ROOT.getMap(), "list", ROOT.getList()},
             {ROOT, "map.array[0]", new Integer(ROOT.getArray()[0])},
             {ROOT, "map.list[1]", ROOT.getList().get(1)},

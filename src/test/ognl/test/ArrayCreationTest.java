@@ -47,10 +47,10 @@ public class ArrayCreationTest extends OgnlTestCase {
             {ROOT, "new Object[4] { #root, #this }", ExpressionSyntaxException.class},
             {ROOT, "new Object[4]", new Object[4]},
             {ROOT, "new Object[] { #root, #this }", new Object[]{ROOT, ROOT}},
-            {ROOT, "new org.ognl.test.objects.Simple[] { new org.ognl.test.objects.Simple(), new org.ognl.test.objects.Simple(\"foo\", 1.0, 2) }", new Simple[]{new Simple(), new Simple("foo", 1.0f, 2)}},
-            {ROOT, "new org.ognl.test.objects.Simple[5]", new Simple[5]},
-            {ROOT, "new org.ognl.test.objects.Simple(new Object[5])", new Simple(new Object[5])},
-            {ROOT, "new org.ognl.test.objects.Simple(new String[5])", new Simple(new String[5])},
+            {ROOT, "new ognl.test.objects.Simple[] { new ognl.test.objects.Simple(), new ognl.test.objects.Simple(\"foo\", 1.0, 2) }", new Simple[]{new Simple(), new Simple("foo", 1.0f, 2)}},
+            {ROOT, "new ognl.test.objects.Simple[5]", new Simple[5]},
+            {ROOT, "new ognl.test.objects.Simple(new Object[5])", new Simple(new Object[5])},
+            {ROOT, "new ognl.test.objects.Simple(new String[5])", new Simple(new String[5])},
     };
 
     /*===================================================================
