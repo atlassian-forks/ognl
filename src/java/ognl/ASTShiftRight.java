@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTShiftRight extends ExpressionNode
-{
+class ASTShiftRight extends ExpressionNode {
     public ASTShiftRight(int id) {
         super(id);
     }
@@ -44,15 +43,13 @@ class ASTShiftRight extends ExpressionNode
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object v1 = children[0].getValue( context, source );
-        Object v2 = children[1].getValue( context, source );
-        return OgnlOps.shiftRight( v1, v2 );
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object v1 = children[0].getValue(context, source);
+        Object v2 = children[1].getValue(context, source);
+        return OgnlOps.shiftRight(v1, v2);
     }
 
-    public String getExpressionOperator(int index)
-    {
+    public String getExpressionOperator(int index) {
         return ">>";
     }
 }

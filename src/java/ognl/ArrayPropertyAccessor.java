@@ -36,32 +36,32 @@ import java.util.Map;
 /**
  * Implementation of PropertyAccessor that uses numbers and dynamic subscripts as
  * properties to index into Java arrays.
+ *
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
 public class ArrayPropertyAccessor extends ObjectPropertyAccessor
-    implements PropertyAccessor // This is here to make javadoc show this class as an implementor
+        implements PropertyAccessor // This is here to make javadoc show this class as an implementor
 {
-    public Object getProperty( Map context, Object target, Object name ) throws OgnlException
-    {
-        Object      result = null;
+    public Object getProperty(Map context, Object target, Object name) throws OgnlException {
+        Object result = null;
 
         if (name instanceof String) {
             if (name.equals("length")) {
-                result = new Integer( Array.getLength(target) );
+                result = new Integer(Array.getLength(target));
             } else {
-                result = super.getProperty( context, target, name );
+                result = super.getProperty(context, target, name);
             }
         } else {
-            Object      index = name;
+            Object index = name;
 
             if (index instanceof DynamicSubscript) {
-                int     len = Array.getLength(target);
+                int len = Array.getLength(target);
 
-                switch (((DynamicSubscript)index).getFlag()) {
+                switch (((DynamicSubscript) index).getFlag()) {
                     case DynamicSubscript.ALL:
-                        result = Array.newInstance( target.getClass().getComponentType(), len );
-                        System.arraycopy( target, 0, result, 0, len );
+                        result = Array.newInstance(target.getClass().getComponentType(), len);
+                        System.arraycopy(target, 0, result, 0, len);
                         break;
                     case DynamicSubscript.FIRST:
                         index = new Integer((len > 0) ? 0 : -1);
@@ -76,7 +76,7 @@ public class ArrayPropertyAccessor extends ObjectPropertyAccessor
             }
             if (result == null) {
                 if (index instanceof Number) {
-                    int     i = ((Number)index).intValue();
+                    int i = ((Number) index).intValue();
 
                     result = (i >= 0) ? Array.get(target, i) : null;
                 } else {
@@ -87,26 +87,25 @@ public class ArrayPropertyAccessor extends ObjectPropertyAccessor
         return result;
     }
 
-    public void setProperty( Map context, Object target, Object name, Object value ) throws OgnlException
-    {
-        Object          index = name;
-        boolean         isNumber = (index instanceof Number);
+    public void setProperty(Map context, Object target, Object name, Object value) throws OgnlException {
+        Object index = name;
+        boolean isNumber = (index instanceof Number);
 
         if (isNumber || (index instanceof DynamicSubscript)) {
-            TypeConverter       converter = ((OgnlContext)context).getTypeConverter();
-            Object              convertedValue;
+            TypeConverter converter = ((OgnlContext) context).getTypeConverter();
+            Object convertedValue;
 
             convertedValue = converter.convertValue(context, target, null, name.toString(), value, target.getClass().getComponentType());
             if (isNumber) {
-                int     i = ((Number)index).intValue();
+                int i = ((Number) index).intValue();
 
                 if (i >= 0) {
                     Array.set(target, i, convertedValue);
                 }
             } else {
-                int     len = Array.getLength(target);
+                int len = Array.getLength(target);
 
-                switch ( ((DynamicSubscript)index).getFlag() ) {
+                switch (((DynamicSubscript) index).getFlag()) {
                     case DynamicSubscript.ALL:
                         System.arraycopy(target, 0, convertedValue, 0, len);
                         return;
@@ -117,7 +116,7 @@ public class ArrayPropertyAccessor extends ObjectPropertyAccessor
                         index = new Integer((len > 0) ? (len / 2) : -1);
                         break;
                     case DynamicSubscript.LAST:
-                        index = new Integer((len > 0 ) ? (len - 1) : -1);
+                        index = new Integer((len > 0) ? (len - 1) : -1);
                         break;
                 }
             }

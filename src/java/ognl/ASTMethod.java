@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTMethod extends SimpleNode
-{
+class ASTMethod extends SimpleNode {
     private String methodName;
 
     public ASTMethod(int id) {
@@ -46,33 +45,33 @@ class ASTMethod extends SimpleNode
         super(p, id);
     }
 
-      /** Called from parser action. */
-    void setMethodName( String methodName ) {
+    /**
+     * Called from parser action.
+     */
+    void setMethodName(String methodName) {
         this.methodName = methodName;
     }
 
     /**
-        Returns the method name that this node will call.
+     * Returns the method name that this node will call.
      */
-    public String getMethodName()
-    {
+    public String getMethodName() {
         return methodName;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object[]    args = OgnlRuntime.getObjectArrayPool().create(jjtGetNumChildren());
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object[] args = OgnlRuntime.getObjectArrayPool().create(jjtGetNumChildren());
 
         try {
-            Object      result,
-                        root = context.getRoot();
+            Object result,
+                    root = context.getRoot();
 
-            for ( int i = 0, icount = args.length; i < icount; ++i ) {
+            for (int i = 0, icount = args.length; i < icount; ++i) {
                 args[i] = children[i].getValue(context, root);
             }
-            result = OgnlRuntime.callMethod( context, source, methodName, null, args);
+            result = OgnlRuntime.callMethod(context, source, methodName, null, args);
             if (result == null) {
-                NullHandler     nh = OgnlRuntime.getNullHandler(OgnlRuntime.getTargetClass(source));
+                NullHandler nh = OgnlRuntime.getNullHandler(OgnlRuntime.getTargetClass(source));
 
                 result = nh.nullMethodResult(context, source, methodName, args);
             }
@@ -82,9 +81,8 @@ class ASTMethod extends SimpleNode
         }
     }
 
-    public String toString()
-    {
-        String      result = methodName;
+    public String toString() {
+        String result = methodName;
 
         result = result + "(";
         if ((children != null) && (children.length > 0)) {

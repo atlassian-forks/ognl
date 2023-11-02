@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTVarRef extends SimpleNode
-{
+class ASTVarRef extends SimpleNode {
     private String name;
 
     public ASTVarRef(int id) {
@@ -46,16 +45,16 @@ class ASTVarRef extends SimpleNode
         super(p, id);
     }
 
-    void setName( String name ) {
+    void setName(String name) {
         this.name = name;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException {
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
         return context.get(name);
     }
 
-    protected void setValueBody( OgnlContext context, Object target, Object value ) throws OgnlException {
-        context.put( name, value );
+    protected void setValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
+        context.put(name, value);
     }
 
     public String toString() {

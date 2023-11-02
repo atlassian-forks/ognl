@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTAnd extends ExpressionNode
-{
+class ASTAnd extends ExpressionNode {
     public ASTAnd(int id) {
         super(id);
     }
@@ -48,31 +47,28 @@ class ASTAnd extends ExpressionNode
         flattenTree();
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
         Object result = null;
         int last = children.length - 1;
-        for ( int i=0; i <= last; ++i ) {
-            result = children[i].getValue( context, source );
-            if ( i != last && ! OgnlOps.booleanValue(result) )
+        for (int i = 0; i <= last; ++i) {
+            result = children[i].getValue(context, source);
+            if (i != last && !OgnlOps.booleanValue(result))
                 break;
         }
         return result;
     }
 
-    protected void setValueBody( OgnlContext context, Object target, Object value ) throws OgnlException
-    {
+    protected void setValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
         int last = children.length - 1;
-        for ( int i=0; i < last; ++i ) {
-            Object v = children[i].getValue( context, target );
-            if ( ! OgnlOps.booleanValue(v) )
+        for (int i = 0; i < last; ++i) {
+            Object v = children[i].getValue(context, target);
+            if (!OgnlOps.booleanValue(v))
                 return;
         }
-        children[last].setValue( context, target, value );
+        children[last].setValue(context, target, value);
     }
 
-    public String getExpressionOperator(int index)
-    {
+    public String getExpressionOperator(int index) {
         return "&&";
     }
 }

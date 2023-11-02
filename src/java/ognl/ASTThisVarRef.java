@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTThisVarRef extends ASTVarRef
-{
+class ASTThisVarRef extends ASTVarRef {
     private String name;
 
     public ASTThisVarRef(int id) {
@@ -46,16 +45,15 @@ class ASTThisVarRef extends ASTVarRef
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException {
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
         return context.getCurrentObject();
     }
 
-    protected void setValueBody( OgnlContext context, Object target, Object value ) throws OgnlException {
-        context.setCurrentObject( value );
+    protected void setValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
+        context.setCurrentObject(value);
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "#this";
     }
 }
