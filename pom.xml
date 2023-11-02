@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>org.ognl</groupId>
@@ -8,19 +7,30 @@
     <version>2.6.10</version>
     
     <name>OGNL - Object Graph Navigation Library</name>
-    <inceptionYear>1997</inceptionYear>
+    <inceptionYear>2023</inceptionYear>
 
-    <url>http://ognl.org</url>
+    <url>https://github.com/atlassian-forks/ognl</url>
 
-    <organization>
-        <name>OpenSymphony</name>
-        <url>http://www.opensymphony.com</url>
-    </organization>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
-    <issueManagement>
-        <system>jira</system>
-        <url>http://jira.opensymphony.com/browse/OGNL</url>
-    </issueManagement>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:atlassian-forks/ognl.git</connection>
+        <url>git@github.com:atlassian-forks/ognl.git</url>
+        <developerConnection>scm:git:git@github.com:atlassian-forks/ognl.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -40,15 +50,33 @@
     <build>
         <sourceDirectory>src/java</sourceDirectory>
         <testSourceDirectory>src/test</testSourceDirectory>
-        
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile-tests</id>
+                        <phase>process-test-sources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <source>${maven.compiler.source}</source>
+                            <target>${maven.compiler.target}</target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.1</version>
                 <configuration>
-                    <excludes>
-                        <exclude>**/OgnlTestCase.java</exclude>
-                    </excludes>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
@@ -58,12 +86,38 @@
                     <archive>
                         <compress>true</compress>
                         <index>true</index>
+                        <manifestEntries>
+                            <Automatic-Module-Name>ognl</Automatic-Module-Name>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <compress>true</compress>
+                        <index>true</index>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <archive>
+                        <compress>true</compress>
+                        <index>true</index>
+                    </archive>
+                    <source>1.8</source>
+                    <links>
+                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
+                    </links>
+                    <doclint>none</doclint>
+                    <quiet>true</quiet>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -72,7 +126,38 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javacc-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>ognl-jjtree</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+                            <lookAhead>1</lookAhead>
+                            <isStatic>false</isStatic>
+                            <javaUnicodeEscape>true</javaUnicodeEscape>
+                            <unicodeInput>true</unicodeInput>
+                            <!-- Uncomment if AST files needs to be generated
+                            <nodePackage>*.jtree</nodePackage>
+                             -->
+                            <!-- Uncomment if visitor default implementation needs to be generated
+                            <visitor>true</visitor>
+                            -->
+                        </configuration>
+                        <goals>
+                            <!-- change goal to jtree-javacc to generate AST too -->
+                            <goal>javacc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
+        <defaultGoal>install</defaultGoal>
+
     </build>
     
 </project>
