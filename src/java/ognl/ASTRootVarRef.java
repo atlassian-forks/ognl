@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTRootVarRef extends ASTVarRef
-{
+class ASTRootVarRef extends ASTVarRef {
     private String name;
 
     public ASTRootVarRef(int id) {
@@ -46,16 +45,15 @@ class ASTRootVarRef extends ASTVarRef
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException {
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
         return context.getRoot();
     }
 
-    protected void setValueBody( OgnlContext context, Object target, Object value ) throws OgnlException {
-        context.setRoot( value );
+    protected void setValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
+        context.setRoot(value);
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "#root";
     }
 }

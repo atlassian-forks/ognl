@@ -34,13 +34,12 @@ import java.util.*;
 
 /**
  * Implementation of ElementsAccessor that returns a collection's iterator.
+ *
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-public class CollectionElementsAccessor implements ElementsAccessor
-{
-    public Enumeration getElements( Object target )
-    {
-        return new IteratorEnumeration( ((Collection)target).iterator() );
+public class CollectionElementsAccessor implements ElementsAccessor {
+    public Enumeration getElements(Object target) {
+        return new IteratorEnumeration(((Collection) target).iterator());
     }
 }

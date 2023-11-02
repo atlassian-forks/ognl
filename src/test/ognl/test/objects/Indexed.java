@@ -30,43 +30,36 @@
 //--------------------------------------------------------------------------
 package ognl.test.objects;
 
-public class Indexed extends Object
-{
-    private String[]        values = new String[] { "foo", "bar", "baz" };
+public class Indexed extends Object {
+    private String[] values = new String[]{"foo", "bar", "baz"};
 
-    public Indexed()
-    {
+    public Indexed() {
         super();
     }
 
-    public Indexed(String[] values)
-    {
+    public Indexed(String[] values) {
         super();
         this.values = values;
     }
 
     /* Indexed property "values" */
-    public String[] getValues()
-    {
+    public String[] getValues() {
         return values;
     }
 
-    public void setValues(String[] value)
-    {
+    public void setValues(String[] value) {
         values = value;
     }
 
     /**
-        This method returns the string from the array and appends "xxx" to
-        distinguish the "get" method from the direct array access.
+     * This method returns the string from the array and appends "xxx" to
+     * distinguish the "get" method from the direct array access.
      */
-    public String getValues(int index)
-    {
+    public String getValues(int index) {
         return values[index] + "xxx";
     }
 
-    public void setValues(int index, String value)
-    {
+    public void setValues(int index, String value) {
         if (value.endsWith("xxx")) {
             values[index] = value.substring(0, value.length() - 3);
         } else {

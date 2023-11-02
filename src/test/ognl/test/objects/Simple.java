@@ -34,106 +34,88 @@ import ognl.test.OgnlTestCase;
 
 import java.math.*;
 
-public class Simple extends Object
-{
-    private String          stringValue;
-    private float           floatValue;
-    private int             intValue;
-    private boolean         booleanValue;
-    private BigInteger      bigIntValue = BigInteger.valueOf(0);
-    private BigDecimal      bigDecValue = new BigDecimal(0.0);
+public class Simple extends Object {
+    private String stringValue;
+    private float floatValue;
+    private int intValue;
+    private boolean booleanValue;
+    private BigInteger bigIntValue = BigInteger.valueOf(0);
+    private BigDecimal bigDecValue = new BigDecimal(0.0);
 
-    public Simple()
-    {
+    public Simple() {
         super();
     }
 
-    public Simple(Object[] values)
-    {
+    public Simple(Object[] values) {
         super();
     }
 
-    public Simple(String stringValue, float floatValue, int intValue)
-    {
+    public Simple(String stringValue, float floatValue, int intValue) {
         super();
         this.stringValue = stringValue;
         this.floatValue = floatValue;
         this.intValue = intValue;
     }
 
-    public void setValues(String stringValue, float floatValue, int intValue)
-    {
+    public void setValues(String stringValue, float floatValue, int intValue) {
         this.stringValue = stringValue;
         this.floatValue = floatValue;
         this.intValue = intValue;
     }
 
-    public String getStringValue()
-    {
+    public String getStringValue() {
         return stringValue;
     }
 
-    public void setStringValue(String value)
-    {
+    public void setStringValue(String value) {
         stringValue = value;
     }
 
-    public float getFloatValue()
-    {
+    public float getFloatValue() {
         return floatValue;
     }
 
-    public void setFloatValue(float value)
-    {
+    public void setFloatValue(float value) {
         floatValue = value;
     }
 
-    public int getIntValue()
-    {
+    public int getIntValue() {
         return intValue;
     }
 
-    public void setIntValue(int value)
-    {
+    public void setIntValue(int value) {
         intValue = value;
     }
 
-    public boolean getBooleanValue()
-    {
+    public boolean getBooleanValue() {
         return booleanValue;
     }
 
-    public void setBooleanValue(boolean value)
-    {
+    public void setBooleanValue(boolean value) {
         booleanValue = value;
     }
 
-    public BigInteger getBigIntValue()
-    {
+    public BigInteger getBigIntValue() {
         return bigIntValue;
     }
 
-    public void setBigIntValue(BigInteger value)
-    {
+    public void setBigIntValue(BigInteger value) {
         bigIntValue = value;
     }
 
-    public BigDecimal getBigDecValue()
-    {
+    public BigDecimal getBigDecValue() {
         return bigDecValue;
     }
 
-    public void setBigDecValue(BigDecimal value)
-    {
+    public void setBigDecValue(BigDecimal value) {
         bigDecValue = value;
     }
 
-    public boolean equals(Object other)
-    {
-        boolean     result = false;
+    public boolean equals(Object other) {
+        boolean result = false;
 
         if (other instanceof Simple) {
-            Simple      os = (Simple)other;
+            Simple os = (Simple) other;
 
             result = OgnlTestCase.isEqual(os.getStringValue(), getStringValue()) && (os.getIntValue() == getIntValue());
         }

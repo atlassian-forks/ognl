@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTInstanceof extends SimpleNode
-{
+class ASTInstanceof extends SimpleNode {
     private String targetType;
 
     public ASTInstanceof(int id) {
@@ -46,18 +45,16 @@ class ASTInstanceof extends SimpleNode
         super(p, id);
     }
 
-    void setTargetType( String targetType ) {
+    void setTargetType(String targetType) {
         this.targetType = targetType;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object value = children[0].getValue( context, source );
-        return OgnlRuntime.isInstance(context, value, targetType)? Boolean.TRUE : Boolean.FALSE;
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object value = children[0].getValue(context, source);
+        return OgnlRuntime.isInstance(context, value, targetType) ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return children[0] + " instanceof " + targetType;
     }
 }

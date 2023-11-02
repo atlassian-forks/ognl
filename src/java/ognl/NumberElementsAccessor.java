@@ -35,26 +35,25 @@ import java.util.*;
 /**
  * Implementation of ElementsAccessor that returns an iterator over integers from 0 up to
  * the given target.
+ *
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-public class NumberElementsAccessor implements ElementsAccessor, NumericTypes
-{
-    public Enumeration getElements( final Object target )
-    {
+public class NumberElementsAccessor implements ElementsAccessor, NumericTypes {
+    public Enumeration getElements(final Object target) {
         return new Enumeration() {
-            private int type = OgnlOps.getNumericType( target );
+            private int type = OgnlOps.getNumericType(target);
             private long next = 0;
-            private long finish = OgnlOps.longValue( target );
+            private long finish = OgnlOps.longValue(target);
 
             public boolean hasMoreElements() {
                 return next < finish;
             }
 
             public Object nextElement() {
-                if ( next >= finish )
+                if (next >= finish)
                     throw new NoSuchElementException();
-                return OgnlOps.newInteger( type, next++ );
+                return OgnlOps.newInteger(type, next++);
             }
         };
     }

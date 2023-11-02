@@ -41,16 +41,17 @@ import java.util.Enumeration;
  * <p> An implementation of this interface will often require that its target objects all
  * be of some particular type.  For example, the MapElementsAccessor class requires that
  * its targets all implement the Map interface.
+ *
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-public interface ElementsAccessor
-{
-      /**
-       * Returns an iterator over the elements of the given target object.
-       * @param target  the object to get the elements of
-       * @return        an iterator over the elements of the given object
-       * @exception OgnlException if there is an error getting the given object's elements
-       */
-    public Enumeration getElements( Object target ) throws OgnlException;
+public interface ElementsAccessor {
+    /**
+     * Returns an iterator over the elements of the given target object.
+     *
+     * @param target the object to get the elements of
+     * @return an iterator over the elements of the given object
+     * @throws OgnlException if there is an error getting the given object's elements
+     */
+    public Enumeration getElements(Object target) throws OgnlException;
 }

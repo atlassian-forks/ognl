@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTBitNegate extends ExpressionNode
-{
+class ASTBitNegate extends ExpressionNode {
     public ASTBitNegate(int id) {
         super(id);
     }
@@ -44,13 +43,11 @@ class ASTBitNegate extends ExpressionNode
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        return OgnlOps.bitNegate( children[0].getValue(context, source) );
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        return OgnlOps.bitNegate(children[0].getValue(context, source));
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "~" + children[0];
     }
 }

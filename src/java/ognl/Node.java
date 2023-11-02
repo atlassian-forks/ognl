@@ -31,41 +31,53 @@
 package ognl;
 
 /**
-   JJTree interface for AST nodes, as modified to handle the OGNL operations getValue and
-   setValue.  JJTree's original comment:
+ * JJTree interface for AST nodes, as modified to handle the OGNL operations getValue and
+ * setValue.  JJTree's original comment:
+ * <p>
+ * All AST nodes must implement this interface.  It provides basic
+ * machinery for constructing the parent and child relationships
+ * between nodes.
+ *
+ * @author Luke Blanshard (blanshlu@netscape.net)
+ * @author Drew Davidson (drew@ognl.org)
+ */
+public interface Node {
 
-   All AST nodes must implement this interface.  It provides basic
-   machinery for constructing the parent and child relationships
-   between nodes.
-
-   @author Luke Blanshard (blanshlu@netscape.net)
-   @author Drew Davidson (drew@ognl.org)
-*/
-public interface Node
-{
-
-    /** This method is called after the node has been made the current
-        node.  It indicates that child nodes can now be added to it. */
+    /**
+     * This method is called after the node has been made the current
+     * node.  It indicates that child nodes can now be added to it.
+     */
     public void jjtOpen();
 
-    /** This method is called after all the child nodes have been
-        added. */
+    /**
+     * This method is called after all the child nodes have been
+     * added.
+     */
     public void jjtClose();
 
-    /** This pair of methods are used to inform the node of its
-        parent. */
+    /**
+     * This pair of methods are used to inform the node of its
+     * parent.
+     */
     public void jjtSetParent(Node n);
+
     public Node jjtGetParent();
 
-    /** This method tells the node to add its argument to the node's
-        list of children.  */
+    /**
+     * This method tells the node to add its argument to the node's
+     * list of children.
+     */
     public void jjtAddChild(Node n, int i);
 
-    /** This method returns a child node.  The children are numbered
-        from zero, left to right. */
+    /**
+     * This method returns a child node.  The children are numbered
+     * from zero, left to right.
+     */
     public Node jjtGetChild(int i);
 
-    /** Return the number of children the node has. */
+    /**
+     * Return the number of children the node has.
+     */
     public int jjtGetNumChildren();
 
 
@@ -75,11 +87,11 @@ public interface Node
      * Extracts the value from the given source object that is appropriate for this node
      * within the given context.
      */
-    public Object getValue( OgnlContext context, Object source ) throws OgnlException;
+    public Object getValue(OgnlContext context, Object source) throws OgnlException;
 
     /**
      * Sets the given value in the given target as appropriate for this node within the
      * given context.
      */
-    public void setValue( OgnlContext context, Object target, Object value ) throws OgnlException;
+    public void setValue(OgnlContext context, Object target, Object value) throws OgnlException;
 }

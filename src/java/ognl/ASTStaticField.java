@@ -37,8 +37,7 @@ import java.lang.reflect.Modifier;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTStaticField extends SimpleNode
-{
+class ASTStaticField extends SimpleNode {
     private String className;
     private String fieldName;
 
@@ -50,24 +49,24 @@ class ASTStaticField extends SimpleNode
         super(p, id);
     }
 
-      /** Called from parser action. */
-    void init( String className, String fieldName ) {
+    /**
+     * Called from parser action.
+     */
+    void init(String className, String fieldName) {
         this.className = className;
         this.fieldName = fieldName;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        return OgnlRuntime.getStaticField( context, className, fieldName );
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        return OgnlRuntime.getStaticField(context, className, fieldName);
     }
 
-    public boolean isNodeConstant( OgnlContext context ) throws OgnlException
-    {
-        boolean     result = false;
-        Exception   reason = null;
+    public boolean isNodeConstant(OgnlContext context) throws OgnlException {
+        boolean result = false;
+        Exception reason = null;
 
         try {
-            Class       c = OgnlRuntime.classForName(context, className);
+            Class c = OgnlRuntime.classForName(context, className);
 
             /*
                 Check for virtual static field "class"; this cannot interfere with
@@ -77,25 +76,28 @@ class ASTStaticField extends SimpleNode
             if (fieldName.equals("class")) {
                 result = true;
             } else {
-                Field   f = c.getField(fieldName);
+                Field f = c.getField(fieldName);
 
                 if (!Modifier.isStatic(f.getModifiers())) {
-                    throw new OgnlException( "Field " + fieldName + " of class " + className + " is not static" );
+                    throw new OgnlException("Field " + fieldName + " of class " + className + " is not static");
                 }
                 result = Modifier.isFinal(f.getModifiers());
             }
-        }   catch (ClassNotFoundException e)    { reason = e; }
-            catch (NoSuchFieldException e)      { reason = e; }
-            catch (SecurityException e)         { reason = e; }
+        } catch (ClassNotFoundException e) {
+            reason = e;
+        } catch (NoSuchFieldException e) {
+            reason = e;
+        } catch (SecurityException e) {
+            reason = e;
+        }
 
         if (reason != null) {
-            throw new OgnlException( "Could not get static field " + fieldName + " from class " + className, reason );
+            throw new OgnlException("Could not get static field " + fieldName + " from class " + className, reason);
         }
         return result;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "@" + className + "@" + fieldName;
     }
 }

@@ -37,10 +37,9 @@ import java.util.*;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTCtor extends SimpleNode
-{
-    private String      className;
-    private boolean     isArray;
+class ASTCtor extends SimpleNode {
+    private String className;
+    private boolean isArray;
 
     public ASTCtor(int id) {
         super(id);
@@ -50,8 +49,10 @@ class ASTCtor extends SimpleNode
         super(p, id);
     }
 
-      /** Called from parser action. */
-    void setClassName( String className ) {
+    /**
+     * Called from parser action.
+     */
+    void setClassName(String className) {
         this.className = className;
     }
 
@@ -59,36 +60,35 @@ class ASTCtor extends SimpleNode
         isArray = value;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object      result,
-                    root = context.getRoot();
-        int         count = jjtGetNumChildren();
-        Object[]    args = OgnlRuntime.getObjectArrayPool().create(count);
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object result,
+                root = context.getRoot();
+        int count = jjtGetNumChildren();
+        Object[] args = OgnlRuntime.getObjectArrayPool().create(count);
 
         try {
-            for ( int i=0; i < count; ++i ) {
+            for (int i = 0; i < count; ++i) {
                 args[i] = children[i].getValue(context, root);
             }
             if (isArray) {
                 if (args.length == 1) {
                     try {
-                        Class       componentClass = OgnlRuntime.classForName(context, className);
-                        List        sourceList = null;
-                        int         size;
+                        Class componentClass = OgnlRuntime.classForName(context, className);
+                        List sourceList = null;
+                        int size;
 
                         if (args[0] instanceof List) {
-                            sourceList = (List)args[0];
+                            sourceList = (List) args[0];
                             size = sourceList.size();
                         } else {
-                            size = (int)OgnlOps.longValue(args[0]);
+                            size = (int) OgnlOps.longValue(args[0]);
                         }
                         result = Array.newInstance(componentClass, size);
                         if (sourceList != null) {
-                            TypeConverter   converter = context.getTypeConverter();
+                            TypeConverter converter = context.getTypeConverter();
 
                             for (int i = 0, icount = sourceList.size(); i < icount; i++) {
-                                Object      o = sourceList.get(i);
+                                Object o = sourceList.get(i);
 
                                 if ((o == null) || componentClass.isInstance(o)) {
                                     Array.set(result, i, o);
@@ -104,7 +104,7 @@ class ASTCtor extends SimpleNode
                     throw new OgnlException("only expect array size or fixed initializer list");
                 }
             } else {
-                result = OgnlRuntime.callConstructor( context, className, args );
+                result = OgnlRuntime.callConstructor(context, className, args);
             }
 
             return result;
@@ -113,9 +113,8 @@ class ASTCtor extends SimpleNode
         }
     }
 
-    public String toString()
-    {
-        String      result = "new " + className;
+    public String toString() {
+        String result = "new " + className;
 
         if (isArray) {
             if (children[0] instanceof ASTConst) {

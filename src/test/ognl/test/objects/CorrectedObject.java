@@ -30,28 +30,22 @@
 //--------------------------------------------------------------------------
 package ognl.test.objects;
 
-public class CorrectedObject extends Object
-{
-    public CorrectedObject()
-    {
+public class CorrectedObject extends Object {
+    public CorrectedObject() {
         super();
     }
 
-    public void setStringValue(String value)
-    {
+    public void setStringValue(String value) {
     }
 
-    public String getStringValue()
-    {
+    public String getStringValue() {
         return null;
     }
 
-    public String getIndexedStringValue(String key)
-    {
+    public String getIndexedStringValue(String key) {
         return null;
     }
 
-    public void setIndexedStringValue(String key, String value)
-    {
+    public void setIndexedStringValue(String key, String value) {
     }
 }

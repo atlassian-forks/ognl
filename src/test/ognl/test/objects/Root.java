@@ -31,166 +31,143 @@
 package ognl.test.objects;
 
 import java.util.*;
+
 import ognl.DynamicSubscript;
 
-public class Root extends Object
-{
-    public static final String      SIZE_STRING = "size";
-    public static final int         STATIC_INT = 23;
+public class Root extends Object {
+    public static final String SIZE_STRING = "size";
+    public static final int STATIC_INT = 23;
 
-    private int[]                   array = { 1, 2, 3, 4 };
-    private Map                     map = new HashMap(23);
-    private MyMap                   myMap = new MyMapImpl();
-    private List                    list = Arrays.asList(new Object[] { null, this, array });
-    private List                    settableList = new ArrayList(Arrays.asList(new Object[] { "foo", "bar", "baz" }));
-    private int                     index = 1;
-    private int                     intValue = 0;
-    private String                  stringValue;
-    private int                     yetAnotherIntValue = 46;
-    private boolean                 privateAccessorBooleanValue = true;
-    private int                     privateAccessorIntValue = 67;
-    private int                     privateAccessorIntValue2 = 67;
-    private int                     privateAccessorIntValue3 = 67;
-    public String                   anotherStringValue = "foo";
-    public int                      anotherIntValue = 123;
-    public int                      six = 6;
+    private int[] array = {1, 2, 3, 4};
+    private Map map = new HashMap(23);
+    private MyMap myMap = new MyMapImpl();
+    private List list = Arrays.asList(new Object[]{null, this, array});
+    private List settableList = new ArrayList(Arrays.asList(new Object[]{"foo", "bar", "baz"}));
+    private int index = 1;
+    private int intValue = 0;
+    private String stringValue;
+    private int yetAnotherIntValue = 46;
+    private boolean privateAccessorBooleanValue = true;
+    private int privateAccessorIntValue = 67;
+    private int privateAccessorIntValue2 = 67;
+    private int privateAccessorIntValue3 = 67;
+    public String anotherStringValue = "foo";
+    public int anotherIntValue = 123;
+    public int six = 6;
 
-	/*===================================================================
-		Public static methods
-	  ===================================================================*/
-	public static int getStaticInt()
-	{
-	    return STATIC_INT;
-	}
+    /*===================================================================
+        Public static methods
+      ===================================================================*/
+    public static int getStaticInt() {
+        return STATIC_INT;
+    }
 
-	/*===================================================================
-		Constructors
-	  ===================================================================*/
-    public Root()
-    {
+    /*===================================================================
+        Constructors
+      ===================================================================*/
+    public Root() {
         super();
     }
 
-	/*===================================================================
-		Private methods
-	  ===================================================================*/
-    {
-        map.put( "test", this );
-        map.put( "array", array );
-        map.put( "list", list );
-        map.put( "size", new Integer(5000) );
-        map.put( DynamicSubscript.first, new Integer(99) );
+    /*===================================================================
+        Private methods
+      ===================================================================*/ {
+        map.put("test", this);
+        map.put("array", array);
+        map.put("list", list);
+        map.put("size", new Integer(5000));
+        map.put(DynamicSubscript.first, new Integer(99));
 
         /* make myMap identical */
-        myMap.putAll( map );
+        myMap.putAll(map);
     }
 
-    private boolean isPrivateAccessorBooleanValue()
-    {
+    private boolean isPrivateAccessorBooleanValue() {
         return privateAccessorBooleanValue;
     }
 
-    private void setPrivateAccessorBooleanValue(boolean value)
-    {
+    private void setPrivateAccessorBooleanValue(boolean value) {
         privateAccessorBooleanValue = value;
     }
 
-    private int getPrivateAccessorIntValue()
-    {
+    private int getPrivateAccessorIntValue() {
         return privateAccessorIntValue;
     }
 
-    private void setPrivateAccessorIntValue(int value)
-    {
+    private void setPrivateAccessorIntValue(int value) {
         privateAccessorIntValue = value;
     }
 
-	/*===================================================================
-		Protected methods
-	  ===================================================================*/
-    protected int getPrivateAccessorIntValue2()
-    {
+    /*===================================================================
+        Protected methods
+      ===================================================================*/
+    protected int getPrivateAccessorIntValue2() {
         return privateAccessorIntValue2;
     }
 
-    protected void setPrivateAccessorIntValue2(int value)
-    {
+    protected void setPrivateAccessorIntValue2(int value) {
         privateAccessorIntValue2 = value;
     }
 
-	/*===================================================================
-		Package protected methods
-	  ===================================================================*/
-    int getPrivateAccessorIntValue3()
-    {
+    /*===================================================================
+        Package protected methods
+      ===================================================================*/
+    int getPrivateAccessorIntValue3() {
         return privateAccessorIntValue3;
     }
 
-    void setPrivateAccessorIntValue3(int value)
-    {
+    void setPrivateAccessorIntValue3(int value) {
         privateAccessorIntValue3 = value;
     }
 
-	/*===================================================================
-		Public methods
-	  ===================================================================*/
-    public int[] getArray()
-    {
+    /*===================================================================
+        Public methods
+      ===================================================================*/
+    public int[] getArray() {
         return array;
     }
 
-    public void setArray(int[] value)
-    {
+    public void setArray(int[] value) {
         array = value;
     }
 
-    public Map getMap()
-    {
+    public Map getMap() {
         return map;
     }
 
-    public MyMap getMyMap()
-    {
+    public MyMap getMyMap() {
         return myMap;
     }
 
-    public List getList()
-    {
+    public List getList() {
         return list;
     }
 
-    public List getSettableList()
-    {
+    public List getSettableList() {
         return settableList;
     }
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return index;
     }
 
-    public int getIntValue()
-    {
+    public int getIntValue() {
         return intValue;
     }
 
-    public void setIntValue(int value)
-    {
+    public void setIntValue(int value) {
         intValue = value;
     }
 
-    public String getStringValue()
-    {
+    public String getStringValue() {
         return stringValue;
     }
 
-    public void setStringValue(String value)
-    {
+    public void setStringValue(String value) {
         stringValue = value;
     }
 
-    public Object getNullObject()
-    {
+    public Object getNullObject() {
         return null;
     }
 }

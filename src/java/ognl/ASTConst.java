@@ -36,8 +36,7 @@ import java.math.*;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTConst extends SimpleNode
-{
+class ASTConst extends SimpleNode {
     private Object value;
 
     public ASTConst(int id) {
@@ -48,8 +47,10 @@ class ASTConst extends SimpleNode
         super(p, id);
     }
 
-      /** Called from parser actions. */
-    void setValue( Object value ) {
+    /**
+     * Called from parser actions.
+     */
+    void setValue(Object value) {
         this.value = value;
     }
 
@@ -57,20 +58,18 @@ class ASTConst extends SimpleNode
         return value;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException {
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
         return this.value;
     }
 
-    public boolean isNodeConstant( OgnlContext context ) throws OgnlException
-    {
+    public boolean isNodeConstant(OgnlContext context) throws OgnlException {
         return true;
     }
 
-    public String getEscapedChar(char ch)
-    {
-        String          result;
+    public String getEscapedChar(char ch) {
+        String result;
 
-        switch(ch) {
+        switch (ch) {
             case '\b':
                 result = "\b";
                 break;
@@ -97,8 +96,8 @@ class ASTConst extends SimpleNode
                 break;
             default:
                 if (Character.isISOControl(ch) || (ch > 255)) {
-                    String      hc = Integer.toString((int)ch, 16);
-                    int         hcl = hc.length();
+                    String hc = Integer.toString((int) ch, 16);
+                    int hcl = hc.length();
 
                     result = "\\u";
                     if (hcl < 4) {
@@ -122,9 +121,8 @@ class ASTConst extends SimpleNode
         return result;
     }
 
-    public String getEscapedString(String value)
-    {
-        StringBuffer        result = new StringBuffer();
+    public String getEscapedString(String value) {
+        StringBuffer result = new StringBuffer();
 
         for (int i = 0, icount = value.length(); i < icount; i++) {
             result.append(getEscapedChar(value.charAt(i)));
@@ -132,9 +130,8 @@ class ASTConst extends SimpleNode
         return new String(result);
     }
 
-    public String toString()
-    {
-        String      result;
+    public String toString() {
+        String result;
 
         if (value == null) {
             result = "null";
@@ -143,7 +140,7 @@ class ASTConst extends SimpleNode
                 result = '\"' + getEscapedString(value.toString()) + '\"';
             } else {
                 if (value instanceof Character) {
-                    result = '\'' + getEscapedChar(((Character)value).charValue()) + '\'';
+                    result = '\'' + getEscapedChar(((Character) value).charValue()) + '\'';
                 } else {
                     result = value.toString();
                     if (value instanceof Long) {

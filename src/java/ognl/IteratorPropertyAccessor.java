@@ -35,25 +35,25 @@ import java.util.*;
 /**
  * Implementation of PropertyAccessor that provides "property" reference to
  * "next" and "hasNext".
+ *
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
 public class IteratorPropertyAccessor extends ObjectPropertyAccessor
-    implements PropertyAccessor // This is here to make javadoc show this class as an implementor
+        implements PropertyAccessor // This is here to make javadoc show this class as an implementor
 {
-    public Object getProperty( Map context, Object target, Object name ) throws OgnlException
-    {
-        Object      result;
-        Iterator    iterator = (Iterator)target;
+    public Object getProperty(Map context, Object target, Object name) throws OgnlException {
+        Object result;
+        Iterator iterator = (Iterator) target;
 
-        if ( name instanceof String ) {
+        if (name instanceof String) {
             if (name.equals("next")) {
                 result = iterator.next();
             } else {
                 if (name.equals("hasNext")) {
                     result = iterator.hasNext() ? Boolean.TRUE : Boolean.FALSE;
                 } else {
-                    result = super.getProperty( context, target, name );
+                    result = super.getProperty(context, target, name);
                 }
             }
         } else {
@@ -62,8 +62,7 @@ public class IteratorPropertyAccessor extends ObjectPropertyAccessor
         return result;
     }
 
-    public void setProperty( Map context, Object target, Object name, Object value ) throws OgnlException
-    {
-        throw new IllegalArgumentException( "can't set property " + name + " on Iterator" );
+    public void setProperty(Map context, Object target, Object name, Object value) throws OgnlException {
+        throw new IllegalArgumentException("can't set property " + name + " on Iterator");
     }
 }

@@ -41,57 +41,49 @@ import ognl.OgnlException;
  * This is a test program for private access in OGNL.
  * shows the failures and a summary.
  */
-public class PrivateMemberTest extends TestCase
-{
-    private String                  _privateProperty = "private value";
-    protected OgnlContext           context;
+public class PrivateMemberTest extends TestCase {
+    private String _privateProperty = "private value";
+    protected OgnlContext context;
 
 
-	/*===================================================================
-		Public static methods
-	  ===================================================================*/
-    public static TestSuite suite()
-    {
+    /*===================================================================
+        Public static methods
+      ===================================================================*/
+    public static TestSuite suite() {
         return new TestSuite(PrivateMemberTest.class);
     }
 
-	/*===================================================================
-		Constructors
-	  ===================================================================*/
-	public PrivateMemberTest(String name)
-	{
-	    super(name);
-	}
+    /*===================================================================
+        Constructors
+      ===================================================================*/
+    public PrivateMemberTest(String name) {
+        super(name);
+    }
 
-	/*===================================================================
-		Public methods
-	  ===================================================================*/
-    private String getPrivateProperty()
-    {
+    /*===================================================================
+        Public methods
+      ===================================================================*/
+    private String getPrivateProperty() {
         return _privateProperty;
     }
 
-    private void setPrivateProperty(String value)
-    {
+    private void setPrivateProperty(String value) {
         _privateProperty = value;
     }
 
-    public void testPrivateAccessor() throws OgnlException
-    {
+    public void testPrivateAccessor() throws OgnlException {
         assertEquals(Ognl.getValue("privateProperty", context, this), getPrivateProperty());
     }
 
-    public void testPrivateField() throws OgnlException
-    {
+    public void testPrivateField() throws OgnlException {
         assertEquals(Ognl.getValue("_privateProperty", context, this), _privateProperty);
     }
 
-	/*===================================================================
-		Overridden methods
-	  ===================================================================*/
-	public void setUp()
-	{
-        context = (OgnlContext)Ognl.createDefaultContext(null);
+    /*===================================================================
+        Overridden methods
+      ===================================================================*/
+    public void setUp() {
+        context = (OgnlContext) Ognl.createDefaultContext(null);
         context.setMemberAccess(new DefaultMemberAccess(true));
-	}
+    }
 }

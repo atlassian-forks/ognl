@@ -32,10 +32,9 @@ package ognl.test.objects;
 
 import java.util.*;
 
-public class Bean3 extends Object
-{
-    private int         value = 100;
-    private Map         map;
+public class Bean3 extends Object {
+    private int value = 100;
+    private Map map;
 
     {
         map = new HashMap();
@@ -43,27 +42,22 @@ public class Bean3 extends Object
         map.put("bar", "baz");
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(int value)
-    {
+    public void setValue(int value) {
         this.value = value;
     }
 
-    public Object getIndexedValue(int index)
-    {
+    public Object getIndexedValue(int index) {
         return null;
     }
 
-    public void setIndexedValue(int index, Object value)
-    {
+    public void setIndexedValue(int index, Object value) {
     }
 
-    public Map getMap()
-    {
+    public Map getMap() {
         return map;
     }
 }

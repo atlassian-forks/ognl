@@ -35,6 +35,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -51,28 +52,29 @@ import ognl.test.util.NameFactory;
  * Implementation of PropertyAccessor that uses Javassist to compile
  * a property accessor specifically tailored to the property.
  */
-public class CompilingPropertyAccessor extends ObjectPropertyAccessor
-{
-    private static NameFactory                  NAME_FACTORY = new NameFactory("ognl.PropertyAccessor", "v");
-    private static Getter                       NotFoundGetter = new Getter() { public Object get(OgnlContext context, Object target, String propertyName) { return null; } };
-    private static Getter                       DefaultGetter = new Getter() {
-                                                    public Object get(OgnlContext context, Object target, String propertyName)
-                                                    {
-                                                        try {
-                                                            return OgnlRuntime.getMethodValue(context, target, propertyName, true);
-                                                        } catch (Exception ex) {
-                                                            throw new RuntimeException(ex);
-                                                        }
-                                                    }
-                                                };
-    private static Map                          pools = new HashMap();
-    private static Map                          loaders = new HashMap();
+public class CompilingPropertyAccessor extends ObjectPropertyAccessor {
+    private static NameFactory NAME_FACTORY = new NameFactory("ognl.PropertyAccessor", "v");
+    private static Getter NotFoundGetter = new Getter() {
+        public Object get(OgnlContext context, Object target, String propertyName) {
+            return null;
+        }
+    };
+    private static Getter DefaultGetter = new Getter() {
+        public Object get(OgnlContext context, Object target, String propertyName) {
+            try {
+                return OgnlRuntime.getMethodValue(context, target, propertyName, true);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    };
+    private static Map pools = new HashMap();
+    private static Map loaders = new HashMap();
 
-    private static java.util.IdentityHashMap    PRIMITIVE_WRAPPER_CLASSES = new IdentityHashMap();
-    private java.util.IdentityHashMap           seenGetMethods = new java.util.IdentityHashMap();
+    private static java.util.IdentityHashMap PRIMITIVE_WRAPPER_CLASSES = new IdentityHashMap();
+    private java.util.IdentityHashMap seenGetMethods = new java.util.IdentityHashMap();
 
-    static
-    {
+    static {
         PRIMITIVE_WRAPPER_CLASSES.put(Boolean.TYPE, Boolean.class);
         PRIMITIVE_WRAPPER_CLASSES.put(Boolean.class, Boolean.TYPE);
         PRIMITIVE_WRAPPER_CLASSES.put(Byte.TYPE, Byte.class);
@@ -91,34 +93,30 @@ public class CompilingPropertyAccessor extends ObjectPropertyAccessor
         PRIMITIVE_WRAPPER_CLASSES.put(Double.class, Double.TYPE);
     }
 
-    public static Class getPrimitiveWrapperClass(Class primitiveClass)
-    {
-        return (Class)PRIMITIVE_WRAPPER_CLASSES.get(primitiveClass);
+    public static Class getPrimitiveWrapperClass(Class primitiveClass) {
+        return (Class) PRIMITIVE_WRAPPER_CLASSES.get(primitiveClass);
     }
 
-    public interface Getter
-    {
+    public interface Getter {
         public Object get(OgnlContext context, Object target, String propertyName);
     }
 
-    public static Getter generateGetter(OgnlContext context, String code) throws OgnlException
-    {
-        String                  className = NAME_FACTORY.getNewClassName();
+    public static Getter generateGetter(OgnlContext context, String code) throws OgnlException {
+        String className = NAME_FACTORY.getNewClassName();
 
-        try
-        {
-            ClassPool               pool = (ClassPool)pools.get(context.getClassResolver());
-            EnhancedClassLoader     loader = (EnhancedClassLoader)loaders.get(context.getClassResolver());
-            CtClass                 newClass;
-            CtClass                 ognlContextClass;
-            CtClass                 objectClass;
-            CtClass                 stringClass;
-            CtMethod                method;
-            byte[]                  byteCode;
-            Class                   compiledClass;
+        try {
+            ClassPool pool = (ClassPool) pools.get(context.getClassResolver());
+            EnhancedClassLoader loader = (EnhancedClassLoader) loaders.get(context.getClassResolver());
+            CtClass newClass;
+            CtClass ognlContextClass;
+            CtClass objectClass;
+            CtClass stringClass;
+            CtMethod method;
+            byte[] byteCode;
+            Class compiledClass;
 
             if ((pool == null) || (loader == null)) {
-                ClassLoader     classLoader = new ContextClassLoader(OgnlContext.class.getClassLoader(), context);
+                ClassLoader classLoader = new ContextClassLoader(OgnlContext.class.getClassLoader(), context);
 
                 pool = ClassPool.getDefault();
                 pool.insertClassPath(new LoaderClassPath(classLoader));
@@ -134,57 +132,56 @@ public class CompilingPropertyAccessor extends ObjectPropertyAccessor
             stringClass = pool.get(String.class.getName());
 
             newClass.addInterface(pool.get(Getter.class.getName()));
-                method = new CtMethod(objectClass, "get", new CtClass[] { ognlContextClass, objectClass, stringClass }, newClass);
-                method.setBody("{" + code + "}");
+            method = new CtMethod(objectClass, "get", new CtClass[]{ognlContextClass, objectClass, stringClass}, newClass);
+            method.setBody("{" + code + "}");
             newClass.addMethod(method);
             byteCode = newClass.toBytecode();
             compiledClass = loader.defineClass(className, byteCode);
-            return (Getter)compiledClass.newInstance();
+            return (Getter) compiledClass.newInstance();
         } catch (Throwable ex) {
             throw new OgnlException("Cannot create class", ex);
         }
     }
 
-    private Getter getGetter(OgnlContext context, Object target, String propertyName) throws OgnlException
-    {
-        Getter      result;
-        Class       targetClass = target.getClass();
-        Map         propertyMap;
+    private Getter getGetter(OgnlContext context, Object target, String propertyName) throws OgnlException {
+        Getter result;
+        Class targetClass = target.getClass();
+        Map propertyMap;
 
-        if ((propertyMap = (Map)seenGetMethods.get(targetClass)) == null) {
+        if ((propertyMap = (Map) seenGetMethods.get(targetClass)) == null) {
             propertyMap = new HashMap(101);
             seenGetMethods.put(targetClass, propertyMap);
         }
-        if ((result = (Getter)propertyMap.get(propertyName)) == null) {
+        if ((result = (Getter) propertyMap.get(propertyName)) == null) {
             try {
-                Method      method = OgnlRuntime.getGetMethod(context, targetClass, propertyName);
+                Method method = OgnlRuntime.getGetMethod(context, targetClass, propertyName);
 
                 if (method != null) {
                     if (Modifier.isPublic(method.getModifiers())) {
                         if (method.getReturnType().isPrimitive()) {
                             propertyMap.put(propertyName, result = generateGetter(context,
-                                                            "java.lang.Object\t\tresult;\n" +
-                                                            targetClass.getName() + "\t" + "t0 = (" + targetClass.getName() + ")$2;\n" +
-                                                            "\n" +
-                                                            "try {\n" +
-                                                            "   result = new " + getPrimitiveWrapperClass(method.getReturnType()).getName() + "(t0." + method.getName() + "());\n" +
-                                                            "} catch (java.lang.Exception ex) {\n" +
-                                                            "    throw new java.lang.RuntimeException(ex);\n" +
-                                                            "}\n" +
-                                                            "return result;"
-                                                        ));
+                                    "java.lang.Object\t\tresult;\n" +
+                                            targetClass.getName() + "\t" + "t0 = (" + targetClass.getName() + ")$2;\n" +
+                                            "\n" +
+                                            "try {\n" +
+                                            "   result = new " + getPrimitiveWrapperClass(method.getReturnType()).getName() + "(t0." + method.getName() + "());\n" +
+                                            "} catch (java.lang.Exception ex) {\n" +
+                                            "    throw new java.lang.RuntimeException(ex);\n" +
+                                            "}\n" +
+                                            "return result;"
+                            ));
                         } else {
                             propertyMap.put(propertyName, result = generateGetter(context,
-                                                            "java.lang.Object\t\tresult;\n" +
-                                                            targetClass.getName() + "\t" + "t0 = (" + targetClass.getName() + ")$2;\n" +
-                                                            "\n" +
-                                                            "try {\n" +
-                                                            "   result = t0." + method.getName() + "();\n" +
-                                                            "} catch (java.lang.Exception ex) {\n" +
-                                                            "    throw new java.lang.RuntimeException(ex);\n" +
-                                                            "}\n" +
-                                                            "return result;"
-                                                        ));
+                                    "java.lang.Object\t\tresult;\n" +
+                                            targetClass.getName() + "\t" + "t0 = (" + targetClass.getName() + ")$2;\n" +
+                                            "\n" +
+                                            "try {\n" +
+                                            "   result = t0." + method.getName() + "();\n" +
+                                            "} catch (java.lang.Exception ex) {\n" +
+                                            "    throw new java.lang.RuntimeException(ex);\n" +
+                                            "}\n" +
+                                            "return result;"
+                            ));
                         }
                     } else {
                         propertyMap.put(propertyName, result = DefaultGetter);
@@ -200,15 +197,14 @@ public class CompilingPropertyAccessor extends ObjectPropertyAccessor
     }
 
     /**
-        Returns OgnlRuntime.NotFound if the property does not exist.
+     * Returns OgnlRuntime.NotFound if the property does not exist.
      */
-    public Object getPossibleProperty( Map context, Object target, String name) throws OgnlException
-    {
-        Object          result;
-        OgnlContext     ognlContext = (OgnlContext)context;
+    public Object getPossibleProperty(Map context, Object target, String name) throws OgnlException {
+        Object result;
+        OgnlContext ognlContext = (OgnlContext) context;
 
         if (context.get("_compile") != null) {
-            Getter        getter = getGetter(ognlContext, target, name);
+            Getter getter = getGetter(ognlContext, target, name);
 
             if (getter != NotFoundGetter) {
                 result = getter.get(ognlContext, target, name);

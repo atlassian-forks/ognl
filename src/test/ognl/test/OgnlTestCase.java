@@ -32,128 +32,118 @@ package ognl.test;
 
 import java.io.*;
 import java.lang.reflect.*;
+
 import junit.framework.TestCase;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 import ognl.SimpleNode;
 
-public class OgnlTestCase extends TestCase
-{
-    protected OgnlContext               context;
-    private String                      expressionString;
-    private SimpleNode                  expression;
-    private Object                      expectedResult;
-    private Object                      root;
-    private boolean                     hasSetValue;
-    private Object                      setValue;
-    private boolean                     hasExpectedAfterSetResult;
-    private Object                      expectedAfterSetResult;
+public class OgnlTestCase extends TestCase {
+    protected OgnlContext context;
+    private String expressionString;
+    private SimpleNode expression;
+    private Object expectedResult;
+    private Object root;
+    private boolean hasSetValue;
+    private Object setValue;
+    private boolean hasExpectedAfterSetResult;
+    private Object expectedAfterSetResult;
 
 	/*===================================================================
 		Public static methods
 	  ===================================================================*/
-	/**
-		Returns true if object1 is equal to object2 in either the
-		sense that they are the same object or, if both are non-null
-		if they are equal in the <CODE>equals()</CODE> sense.
-	 */
-	public static boolean isEqual(Object object1, Object object2)
-	{
-        boolean     result = false;
 
-      	if (object1 == object2) {
-      	    result = true;
-      	} else {
-	      	if ((object1 != null) && object1.getClass().isArray()) {
-	      	    if ((object2 != null) && object2.getClass().isArray() && (object2.getClass() == object1.getClass())) {
-	      	        result = (Array.getLength(object1) == Array.getLength(object2));
+    /**
+     * Returns true if object1 is equal to object2 in either the
+     * sense that they are the same object or, if both are non-null
+     * if they are equal in the <CODE>equals()</CODE> sense.
+     */
+    public static boolean isEqual(Object object1, Object object2) {
+        boolean result = false;
+
+        if (object1 == object2) {
+            result = true;
+        } else {
+            if ((object1 != null) && object1.getClass().isArray()) {
+                if ((object2 != null) && object2.getClass().isArray() && (object2.getClass() == object1.getClass())) {
+                    result = (Array.getLength(object1) == Array.getLength(object2));
                     if (result) {
                         for (int i = 0, icount = Array.getLength(object1); result && (i < icount); i++) {
                             result = isEqual(Array.get(object1, i), Array.get(object2, i));
                         }
                     }
-	      	    }
-	      	} else {
-    	        result = (object1 != null) && (object2 != null) && object1.equals(object2);
-    	    }
-    	}
+                }
+            } else {
+                result = (object1 != null) && (object2 != null) && object1.equals(object2);
+            }
+        }
         return result;
-	}
+    }
 
-	/*===================================================================
-		Constructors
-	  ===================================================================*/
-	public OgnlTestCase()
-	{
-	    super();
-	}
+    /*===================================================================
+        Constructors
+      ===================================================================*/
+    public OgnlTestCase() {
+        super();
+    }
 
-	public OgnlTestCase(String name)
-	{
-	    super(name);
-	}
+    public OgnlTestCase(String name) {
+        super(name);
+    }
 
-    public OgnlTestCase(String name, Object root, String expressionString, Object expectedResult, Object setValue, Object expectedAfterSetResult)
-    {
+    public OgnlTestCase(String name, Object root, String expressionString, Object expectedResult, Object setValue, Object expectedAfterSetResult) {
         this(name, root, expressionString, expectedResult, setValue);
         this.hasExpectedAfterSetResult = true;
         this.expectedAfterSetResult = expectedAfterSetResult;
     }
 
-    public OgnlTestCase(String name, Object root, String expressionString, Object expectedResult, Object setValue)
-    {
+    public OgnlTestCase(String name, Object root, String expressionString, Object expectedResult, Object setValue) {
         this(name, root, expressionString, expectedResult);
         this.hasSetValue = true;
         this.setValue = setValue;
     }
 
-    public OgnlTestCase(String name, Object root, String expressionString, Object expectedResult)
-    {
+    public OgnlTestCase(String name, Object root, String expressionString, Object expectedResult) {
         this(name);
         this.root = root;
         this.expressionString = expressionString;
         this.expectedResult = expectedResult;
     }
 
-	/*===================================================================
-		Public methods
-	  ===================================================================*/
-	public String getExpressionDump(SimpleNode node)
-	{
-	    StringWriter        writer = new StringWriter();
+    /*===================================================================
+        Public methods
+      ===================================================================*/
+    public String getExpressionDump(SimpleNode node) {
+        StringWriter writer = new StringWriter();
 
         node.dump(new PrintWriter(writer), "   ");
-	    return writer.toString();
-	}
+        return writer.toString();
+    }
 
-	public String getExpressionString()
-	{
-	    return expressionString;
-	}
+    public String getExpressionString() {
+        return expressionString;
+    }
 
-	public SimpleNode getExpression() throws OgnlException
-	{
-	    if (expression == null) {
-	        expression = (SimpleNode)Ognl.parseExpression(expressionString);
-	    }
-	    return expression;
-	}
+    public SimpleNode getExpression() throws OgnlException {
+        if (expression == null) {
+            expression = (SimpleNode) Ognl.parseExpression(expressionString);
+        }
+        return expression;
+    }
 
-	public Object getExpectedResult()
-	{
-	    return expectedResult;
-	}
+    public Object getExpectedResult() {
+        return expectedResult;
+    }
 
-	/*===================================================================
-		Overridden methods
-	  ===================================================================*/
-    protected void runTest() throws Exception
-    {
-        Object          testedResult = null;
+    /*===================================================================
+        Overridden methods
+      ===================================================================*/
+    protected void runTest() throws Exception {
+        Object testedResult = null;
 
         try {
-            SimpleNode  expr;
+            SimpleNode expr;
 
             testedResult = expectedResult;
             expr = getExpression();
@@ -171,15 +161,14 @@ public class OgnlTestCase extends TestCase
             }
         } catch (Exception ex) {
             if (testedResult instanceof Class) {
-                assertTrue(((Class)testedResult).isAssignableFrom(ex.getClass()));
+                assertTrue(((Class) testedResult).isAssignableFrom(ex.getClass()));
             } else {
                 throw ex;
             }
         }
     }
 
-    protected void setUp()
-    {
-        context = (OgnlContext)Ognl.createDefaultContext(null);
+    protected void setUp() {
+        context = (OgnlContext) Ognl.createDefaultContext(null);
     }
 }

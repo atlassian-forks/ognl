@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTKeyValue extends SimpleNode
-{
+class ASTKeyValue extends SimpleNode {
     public ASTKeyValue(int id) {
         super(id);
     }
@@ -44,26 +43,22 @@ class ASTKeyValue extends SimpleNode
         super(p, id);
     }
 
-    protected Node getKey()
-    {
+    protected Node getKey() {
         return children[0];
     }
 
-    protected Node getValue()
-    {
+    protected Node getValue() {
         return (jjtGetNumChildren() > 1) ? children[1] : null;
     }
 
     /**
-        Returns null because this is a parser construct and does not evaluate
+     * Returns null because this is a parser construct and does not evaluate
      */
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
         return null;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return getKey() + " -> " + getValue();
     }
 }

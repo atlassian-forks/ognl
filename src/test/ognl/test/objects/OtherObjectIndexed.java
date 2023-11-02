@@ -30,10 +30,8 @@
 //--------------------------------------------------------------------------
 package ognl.test.objects;
 
-public class OtherObjectIndexed extends BaseObjectIndexed
-{
-    public OtherObjectIndexed()
-    {
+public class OtherObjectIndexed extends BaseObjectIndexed {
+    public OtherObjectIndexed() {
         super();
         setAttribute("foo", "bar");
         setAttribute("bar", "baz");

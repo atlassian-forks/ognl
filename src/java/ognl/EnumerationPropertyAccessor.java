@@ -36,25 +36,25 @@ import java.util.*;
  * Implementation of PropertyAccessor that provides "property" reference to
  * "nextElement" (aliases to "next" also) and "hasMoreElements" (also aliased
  * to "hasNext").
+ *
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
 public class EnumerationPropertyAccessor extends ObjectPropertyAccessor
-    implements PropertyAccessor // This is here to make javadoc show this class as an implementor
+        implements PropertyAccessor // This is here to make javadoc show this class as an implementor
 {
-    public Object getProperty( Map context, Object target, Object name ) throws OgnlException
-    {
-        Object      result;
-        Enumeration e = (Enumeration)target;
+    public Object getProperty(Map context, Object target, Object name) throws OgnlException {
+        Object result;
+        Enumeration e = (Enumeration) target;
 
-        if ( name instanceof String ) {
+        if (name instanceof String) {
             if (name.equals("next") || name.equals("nextElement")) {
                 result = e.nextElement();
             } else {
                 if (name.equals("hasNext") || name.equals("hasMoreElements")) {
                     result = e.hasMoreElements() ? Boolean.TRUE : Boolean.FALSE;
                 } else {
-                    result = super.getProperty( context, target, name );
+                    result = super.getProperty(context, target, name);
                 }
             }
         } else {
@@ -63,8 +63,7 @@ public class EnumerationPropertyAccessor extends ObjectPropertyAccessor
         return result;
     }
 
-    public void setProperty( Map context, Object target, Object name, Object value ) throws OgnlException
-    {
-        throw new IllegalArgumentException( "can't set property " + name + " on Enumeration" );
+    public void setProperty(Map context, Object target, Object name, Object value) throws OgnlException {
+        throw new IllegalArgumentException("can't set property " + name + " on Enumeration");
     }
 }

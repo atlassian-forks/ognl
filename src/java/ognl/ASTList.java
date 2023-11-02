@@ -36,8 +36,7 @@ import java.util.*;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTList extends SimpleNode
-{
+class ASTList extends SimpleNode {
     public ASTList(int id) {
         super(id);
     }
@@ -46,20 +45,18 @@ class ASTList extends SimpleNode
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        List answer = new ArrayList( jjtGetNumChildren() );
-        for ( int i=0; i < jjtGetNumChildren(); ++i )
-            answer.add( children[i].getValue(context, source) );
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        List answer = new ArrayList(jjtGetNumChildren());
+        for (int i = 0; i < jjtGetNumChildren(); ++i)
+            answer.add(children[i].getValue(context, source));
         return answer;
     }
 
-    public String toString()
-    {
-        String      result = "{ ";
+    public String toString() {
+        String result = "{ ";
 
 
-        for ( int i=0; i < jjtGetNumChildren(); ++i ) {
+        for (int i = 0; i < jjtGetNumChildren(); ++i) {
             if (i > 0) {
                 result = result + ", ";
             }

@@ -31,17 +31,16 @@
 package ognl.test;
 
 import java.util.Map;
+
 import ognl.NullHandler;
 
-public class CorrectedObjectNullHandler extends Object implements NullHandler
-{
-    private String          defaultValue;
+public class CorrectedObjectNullHandler extends Object implements NullHandler {
+    private String defaultValue;
 
     /*===================================================================
         Constructors
       ===================================================================*/
-    public CorrectedObjectNullHandler(String defaultValue)
-    {
+    public CorrectedObjectNullHandler(String defaultValue) {
         super();
         this.defaultValue = defaultValue;
     }
@@ -49,17 +48,15 @@ public class CorrectedObjectNullHandler extends Object implements NullHandler
     /*===================================================================
         TypeConverter interface (overridden)
       ===================================================================*/
-    public Object nullMethodResult(Map context, Object target, String methodName, Object[] args)
-    {
+    public Object nullMethodResult(Map context, Object target, String methodName, Object[] args) {
         if (methodName.equals("getStringValue")) {
             return defaultValue;
         }
         return null;
     }
 
-    public Object nullPropertyValue(Map context, Object target, Object property)
-    {
-        Object      result = null;
+    public Object nullPropertyValue(Map context, Object target, Object property) {
+        Object result = null;
 
         if (property.equals("stringValue")) {
             return defaultValue;

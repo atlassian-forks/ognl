@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTStaticMethod extends SimpleNode
-{
+class ASTStaticMethod extends SimpleNode {
     private String className;
     private String methodName;
 
@@ -47,30 +46,30 @@ class ASTStaticMethod extends SimpleNode
         super(p, id);
     }
 
-      /** Called from parser action. */
-    void init( String className, String methodName ) {
+    /**
+     * Called from parser action.
+     */
+    void init(String className, String methodName) {
         this.className = className;
         this.methodName = methodName;
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object[]    args = OgnlRuntime.getObjectArrayPool().create(jjtGetNumChildren());
-        Object      root = context.getRoot();
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object[] args = OgnlRuntime.getObjectArrayPool().create(jjtGetNumChildren());
+        Object root = context.getRoot();
 
         try {
-            for ( int i=0, icount = args.length; i < icount; ++i )
+            for (int i = 0, icount = args.length; i < icount; ++i)
                 args[i] = children[i].getValue(context, root);
 
-            return OgnlRuntime.callStaticMethod( context, className, methodName, args );
+            return OgnlRuntime.callStaticMethod(context, className, methodName, args);
         } finally {
             OgnlRuntime.getObjectArrayPool().recycle(args);
         }
     }
 
-    public String toString()
-    {
-        String      result = "@" + className + "@" + methodName;
+    public String toString() {
+        String result = "@" + className + "@" + methodName;
 
         result = result + "(";
         if ((children != null) && (children.length > 0)) {

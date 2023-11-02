@@ -32,6 +32,7 @@ package ognl.test;
 
 import java.lang.reflect.*;
 import java.text.*;
+
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
@@ -39,52 +40,47 @@ import ognl.OgnlRuntime;
 import ognl.SimpleNode;
 import ognl.test.objects.Bean1;
 
-public class Performance extends Object
-{
-    private static int              MAX_ITERATIONS = -1;
-    private static boolean          ITERATIONS_MODE;
-    private static long             MAX_TIME = -1L;
-    private static boolean          TIME_MODE;
-    private static NumberFormat     FACTOR_FORMAT = new DecimalFormat("0.0");
+public class Performance extends Object {
+    private static int MAX_ITERATIONS = -1;
+    private static boolean ITERATIONS_MODE;
+    private static long MAX_TIME = -1L;
+    private static boolean TIME_MODE;
+    private static NumberFormat FACTOR_FORMAT = new DecimalFormat("0.0");
 
-    private String                  name;
-    private OgnlContext             context = (OgnlContext)Ognl.createDefaultContext(null);
-    private Bean1                   root = new Bean1();
-    private SimpleNode              expression;
-    private Method                  method;
-    private int                     iterations;
-    private long                    t0;
-    private long                    t1;
+    private String name;
+    private OgnlContext context = (OgnlContext) Ognl.createDefaultContext(null);
+    private Bean1 root = new Bean1();
+    private SimpleNode expression;
+    private Method method;
+    private int iterations;
+    private long t0;
+    private long t1;
 
     /*===================================================================
         Private static classes
       ===================================================================*/
-    private static class Results
-    {
-        int         iterations;
-        long        time;
+    private static class Results {
+        int iterations;
+        long time;
 
-        public Results(int iterations, long time)
-        {
+        public Results(int iterations, long time) {
             super();
             this.iterations = iterations;
             this.time = time;
         }
 
-        public float getFactor(Results otherResults)
-        {
+        public float getFactor(Results otherResults) {
             if (TIME_MODE) {
-                return Math.max((float)otherResults.iterations, (float)iterations) / Math.min((float)otherResults.iterations, (float)iterations);
+                return Math.max((float) otherResults.iterations, (float) iterations) / Math.min((float) otherResults.iterations, (float) iterations);
             }
-            return Math.max((float)otherResults.time, (float)time) / Math.min((float)otherResults.time, (float)time);
+            return Math.max((float) otherResults.time, (float) time) / Math.min((float) otherResults.time, (float) time);
         }
     }
 
     /*===================================================================
         Public static methods
       ===================================================================*/
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-time")) {
                 TIME_MODE = true;
@@ -100,35 +96,35 @@ public class Performance extends Object
         }
         OgnlRuntime.setPropertyAccessor(Object.class, new CompilingPropertyAccessor());
         try {
-            Performance[]   tests = new Performance[]
-                                        {
-                                            new Performance("Constant",
-                                                            "100 + 20 * 5",
-                                                            "testConstantExpression"),
-                                            new Performance("Single Property",
-                                                            "bean2",
-                                                            "testSinglePropertyExpression"),
-                                            new Performance("Property Navigation",
-                                                            "bean2.bean3.value",
-                                                            "testPropertyNavigationExpression"),
-                                            new Performance("Property Navigation and Comparison",
-                                                            "bean2.bean3.value <= 24",
-                                                            "testPropertyNavigationAndComparisonExpression"),
-                                            new Performance("Property Navigation with Indexed Access",
-                                                            "bean2.bean3.indexedValue[25]",
-                                                            "testIndexedPropertyNavigationExpression"),
-                                            new Performance("Property Navigation with Map Access",
-                                                            "bean2.bean3.map['foo']",
-                                                            "testPropertyNavigationWithMapExpression"),
-                                        };
+            Performance[] tests = new Performance[]
+                    {
+                            new Performance("Constant",
+                                    "100 + 20 * 5",
+                                    "testConstantExpression"),
+                            new Performance("Single Property",
+                                    "bean2",
+                                    "testSinglePropertyExpression"),
+                            new Performance("Property Navigation",
+                                    "bean2.bean3.value",
+                                    "testPropertyNavigationExpression"),
+                            new Performance("Property Navigation and Comparison",
+                                    "bean2.bean3.value <= 24",
+                                    "testPropertyNavigationAndComparisonExpression"),
+                            new Performance("Property Navigation with Indexed Access",
+                                    "bean2.bean3.indexedValue[25]",
+                                    "testIndexedPropertyNavigationExpression"),
+                            new Performance("Property Navigation with Map Access",
+                                    "bean2.bean3.map['foo']",
+                                    "testPropertyNavigationWithMapExpression"),
+                    };
 
             for (int i = 0; i < tests.length; i++) {
-                Performance     perf = tests[i];
+                Performance perf = tests[i];
 
                 try {
-                    Results         javaResults = perf.testJava(),
-                                    interpretedResults = perf.testExpression(false),
-                                    compiledResults = perf.testExpression(true);
+                    Results javaResults = perf.testJava(),
+                            interpretedResults = perf.testExpression(false),
+                            compiledResults = perf.testExpression(true);
 
                     System.out.println(perf.getName() + ": " + perf.getExpression().toString());
                     System.out.println("       java: " + javaResults.iterations + " iterations in " + javaResults.time + " ms");
@@ -147,13 +143,12 @@ public class Performance extends Object
     /*===================================================================
         Constructors
       ===================================================================*/
-    public Performance(String name, String expressionString, String javaMethodName) throws OgnlException
-    {
+    public Performance(String name, String expressionString, String javaMethodName) throws OgnlException {
         super();
         this.name = name;
-        expression = (SimpleNode)Ognl.parseExpression(expressionString);
+        expression = (SimpleNode) Ognl.parseExpression(expressionString);
         try {
-            method = getClass().getMethod(javaMethodName, new Class[] {});
+            method = getClass().getMethod(javaMethodName, new Class[]{});
         } catch (Exception ex) {
             throw new OgnlException("java method not found", ex);
         }
@@ -162,19 +157,16 @@ public class Performance extends Object
     /*===================================================================
         Protected methods
       ===================================================================*/
-    protected void startTest()
-    {
+    protected void startTest() {
         iterations = 0;
         t0 = t1 = System.currentTimeMillis();
     }
 
-    protected Results endTest()
-    {
+    protected Results endTest() {
         return new Results(iterations, t1 - t0);
     }
 
-    protected boolean done()
-    {
+    protected boolean done() {
         iterations++;
         t1 = System.currentTimeMillis();
         if (TIME_MODE) {
@@ -191,18 +183,15 @@ public class Performance extends Object
     /*===================================================================
         Public methods
       ===================================================================*/
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public SimpleNode getExpression()
-    {
+    public SimpleNode getExpression() {
         return expression;
     }
 
-    public Results testExpression(boolean compiled) throws OgnlException
-    {
+    public Results testExpression(boolean compiled) throws OgnlException {
         if (compiled) {
             context.put("_compile", Boolean.TRUE);
         } else {
@@ -216,26 +205,23 @@ public class Performance extends Object
         return endTest();
     }
 
-    public Results testJava() throws OgnlException
-    {
+    public Results testJava() throws OgnlException {
         try {
-            return (Results)method.invoke(this, new Object[] {});
+            return (Results) method.invoke(this, new Object[]{});
         } catch (Exception ex) {
             throw new OgnlException("invoking java method '" + method.getName() + "'", ex);
         }
     }
 
-    public Results testConstantExpression() throws OgnlException
-    {
+    public Results testConstantExpression() throws OgnlException {
         startTest();
         do {
-            int     result = 100 + 20 * 5;
+            int result = 100 + 20 * 5;
         } while (!done());
         return endTest();
     }
 
-    public Results testSinglePropertyExpression() throws OgnlException
-    {
+    public Results testSinglePropertyExpression() throws OgnlException {
         startTest();
         do {
             root.getBean2();
@@ -243,8 +229,7 @@ public class Performance extends Object
         return endTest();
     }
 
-    public Results testPropertyNavigationExpression() throws OgnlException
-    {
+    public Results testPropertyNavigationExpression() throws OgnlException {
         startTest();
         do {
             root.getBean2().getBean3().getValue();
@@ -252,17 +237,15 @@ public class Performance extends Object
         return endTest();
     }
 
-    public Results testPropertyNavigationAndComparisonExpression() throws OgnlException
-    {
+    public Results testPropertyNavigationAndComparisonExpression() throws OgnlException {
         startTest();
         do {
-            boolean     result = root.getBean2().getBean3().getValue() < 24;
+            boolean result = root.getBean2().getBean3().getValue() < 24;
         } while (!done());
         return endTest();
     }
 
-    public Results testIndexedPropertyNavigationExpression() throws OgnlException
-    {
+    public Results testIndexedPropertyNavigationExpression() throws OgnlException {
         startTest();
         do {
             root.getBean2().getBean3().getIndexedValue(25);
@@ -270,8 +253,7 @@ public class Performance extends Object
         return endTest();
     }
 
-    public Results testPropertyNavigationWithMapExpression() throws OgnlException
-    {
+    public Results testPropertyNavigationWithMapExpression() throws OgnlException {
         startTest();
         do {
             root.getBean2().getBean3().getMap().get("foo");

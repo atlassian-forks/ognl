@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTEval extends SimpleNode
-{
+class ASTEval extends SimpleNode {
     public ASTEval(int id) {
         super(id);
     }
@@ -44,42 +43,39 @@ class ASTEval extends SimpleNode
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object  result,
-                expr = children[0].getValue( context, source ),
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object result,
+                expr = children[0].getValue(context, source),
                 previousRoot = context.getRoot();
-        Node    node;
+        Node node;
 
-        source = children[1].getValue( context, source );
-        node = (expr instanceof Node) ? (Node) expr : (Node) Ognl.parseExpression( expr.toString() );
+        source = children[1].getValue(context, source);
+        node = (expr instanceof Node) ? (Node) expr : (Node) Ognl.parseExpression(expr.toString());
         try {
-            context.setRoot( source );
-            result = node.getValue( context, source );
+            context.setRoot(source);
+            result = node.getValue(context, source);
         } finally {
-            context.setRoot( previousRoot );
+            context.setRoot(previousRoot);
         }
         return result;
     }
 
-    protected void setValueBody( OgnlContext context, Object target, Object value ) throws OgnlException
-    {
-        Object  expr = children[0].getValue(context, target),
+    protected void setValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
+        Object expr = children[0].getValue(context, target),
                 previousRoot = context.getRoot();
-        Node    node;
+        Node node;
 
-        target = children[1].getValue( context, target );
-        node = (expr instanceof Node) ? (Node) expr : (Node) Ognl.parseExpression( expr.toString() );
+        target = children[1].getValue(context, target);
+        node = (expr instanceof Node) ? (Node) expr : (Node) Ognl.parseExpression(expr.toString());
         try {
-            context.setRoot( target );
-            node.setValue( context, target, value );
+            context.setRoot(target);
+            node.setValue(context, target, value);
         } finally {
-            context.setRoot( previousRoot );
+            context.setRoot(previousRoot);
         }
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "(" + children[0] + ")(" + children[1] + ")";
     }
 }

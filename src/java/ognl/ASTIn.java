@@ -34,8 +34,7 @@ package ognl;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTIn extends SimpleNode
-{
+class ASTIn extends SimpleNode {
     public ASTIn(int id) {
         super(id);
     }
@@ -44,15 +43,13 @@ class ASTIn extends SimpleNode
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object v1 = children[0].getValue( context, source );
-        Object v2 = children[1].getValue( context, source );
-        return OgnlOps.in( v1, v2 )? Boolean.TRUE : Boolean.FALSE;
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object v1 = children[0].getValue(context, source);
+        Object v2 = children[1].getValue(context, source);
+        return OgnlOps.in(v1, v2) ? Boolean.TRUE : Boolean.FALSE;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return children[0] + " in " + children[1];
     }
 }

@@ -36,8 +36,7 @@ import java.util.*;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-class ASTSelect extends SimpleNode
-{
+class ASTSelect extends SimpleNode {
     public ASTSelect(int id) {
         super(id);
     }
@@ -46,23 +45,21 @@ class ASTSelect extends SimpleNode
         super(p, id);
     }
 
-    protected Object getValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Node                expr = children[0];
-        List                answer = new ArrayList();
-        ElementsAccessor    elementsAccessor = OgnlRuntime.getElementsAccessor( OgnlRuntime.getTargetClass(source) );
+    protected Object getValueBody(OgnlContext context, Object source) throws OgnlException {
+        Node expr = children[0];
+        List answer = new ArrayList();
+        ElementsAccessor elementsAccessor = OgnlRuntime.getElementsAccessor(OgnlRuntime.getTargetClass(source));
 
         for (Enumeration e = elementsAccessor.getElements(source); e.hasMoreElements(); ) {
-            Object      next = e.nextElement();
+            Object next = e.nextElement();
 
-            if ( OgnlOps.booleanValue(expr.getValue(context, next)) )
+            if (OgnlOps.booleanValue(expr.getValue(context, next)))
                 answer.add(next);
         }
         return answer;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "{? " + children[0] + " }";
     }
 }

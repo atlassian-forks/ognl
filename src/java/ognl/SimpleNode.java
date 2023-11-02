@@ -36,16 +36,15 @@ import java.io.*;
  * @author Luke Blanshard (blanshlu@netscape.net)
  * @author Drew Davidson (drew@ognl.org)
  */
-public abstract class SimpleNode implements Node, Serializable
-{
-    protected Node          parent;
-    protected Node[]        children;
-    protected int           id;
-    protected OgnlParser    parser;
+public abstract class SimpleNode implements Node, Serializable {
+    protected Node parent;
+    protected Node[] children;
+    protected int id;
+    protected OgnlParser parser;
 
-    private boolean         constantValueCalculated;
-    private boolean         hasConstantValue;
-    private Object          constantValue;
+    private boolean constantValueCalculated;
+    private boolean hasConstantValue;
+    private Object constantValue;
 
     public SimpleNode(int i) {
         id = i;
@@ -62,8 +61,13 @@ public abstract class SimpleNode implements Node, Serializable
     public void jjtClose() {
     }
 
-    public void jjtSetParent(Node n) { parent = n; }
-    public Node jjtGetParent() { return parent; }
+    public void jjtSetParent(Node n) {
+        parent = n;
+    }
+
+    public Node jjtGetParent() {
+        return parent;
+    }
 
     public void jjtAddChild(Node n, int i) {
         if (children == null) {
@@ -90,11 +94,15 @@ public abstract class SimpleNode implements Node, Serializable
          toString(String), otherwise overriding toString() is probably all
          you need to do. */
 
-    public String toString() { return OgnlParserTreeConstants.jjtNodeName[id]; }
+    public String toString() {
+        return OgnlParserTreeConstants.jjtNodeName[id];
+    }
 
 // OGNL additions
 
-    public String toString(String prefix) { return prefix + OgnlParserTreeConstants.jjtNodeName[id] + " " + toString(); }
+    public String toString(String prefix) {
+        return prefix + OgnlParserTreeConstants.jjtNodeName[id] + " " + toString();
+    }
 
       /* Override this method if you want to customize how the node dumps
          out its children. */
@@ -103,7 +111,7 @@ public abstract class SimpleNode implements Node, Serializable
         writer.println(toString(prefix));
         if (children != null) {
             for (int i = 0; i < children.length; ++i) {
-                SimpleNode n = (SimpleNode)children[i];
+                SimpleNode n = (SimpleNode) children[i];
                 if (n != null) {
                     n.dump(writer, prefix + "  ");
                 }
@@ -111,12 +119,11 @@ public abstract class SimpleNode implements Node, Serializable
         }
     }
 
-    public int getIndexInParent()
-    {
-        int     result = -1;
+    public int getIndexInParent() {
+        int result = -1;
 
         if (parent != null) {
-            int     icount = parent.jjtGetNumChildren();
+            int icount = parent.jjtGetNumChildren();
 
             for (int i = 0; i < icount; i++) {
                 if (parent.jjtGetChild(i) == this) {
@@ -128,13 +135,12 @@ public abstract class SimpleNode implements Node, Serializable
         return result;
     }
 
-    public Node getNextSibling()
-    {
-        Node    result = null;
-        int     i = getIndexInParent();
+    public Node getNextSibling() {
+        Node result = null;
+        int i = getIndexInParent();
 
         if (i >= 0) {
-            int     icount = parent.jjtGetNumChildren();
+            int icount = parent.jjtGetNumChildren();
 
             if (i < icount) {
                 result = parent.jjtGetChild(i + 1);
@@ -143,9 +149,8 @@ public abstract class SimpleNode implements Node, Serializable
         return result;
     }
 
-    private static String getDepthString(int depth)
-    {
-        StringBuffer    result = new StringBuffer("");
+    private static String getDepthString(int depth) {
+        StringBuffer result = new StringBuffer("");
 
         while (depth > 0) {
             depth--;
@@ -154,9 +159,8 @@ public abstract class SimpleNode implements Node, Serializable
         return new String(result);
     }
 
-    protected Object evaluateGetValueBody( OgnlContext context, Object source ) throws OgnlException
-    {
-        Object      result;
+    protected Object evaluateGetValueBody(OgnlContext context, Object source) throws OgnlException {
+        Object result;
 
         context.setCurrentObject(source);
         context.setCurrentNode(this);
@@ -170,20 +174,18 @@ public abstract class SimpleNode implements Node, Serializable
         return hasConstantValue ? constantValue : getValueBody(context, source);
     }
 
-    protected void evaluateSetValueBody( OgnlContext context, Object target, Object value ) throws OgnlException
-    {
+    protected void evaluateSetValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
         context.setCurrentObject(target);
         context.setCurrentNode(this);
         setValueBody(context, target, value);
     }
 
-    public final Object getValue( OgnlContext context, Object source ) throws OgnlException
-    {
+    public final Object getValue(OgnlContext context, Object source) throws OgnlException {
         if (context.getTraceEvaluations()) {
-            EvaluationPool  pool = OgnlRuntime.getEvaluationPool();
-            Object          result = null;
-            Throwable       evalException = null;
-            Evaluation      evaluation = pool.create(this, source);
+            EvaluationPool pool = OgnlRuntime.getEvaluationPool();
+            Object result = null;
+            Throwable evalException = null;
+            Evaluation evaluation = pool.create(this, source);
 
             context.pushEvaluation(evaluation);
             try {
@@ -195,7 +197,7 @@ public abstract class SimpleNode implements Node, Serializable
                 evalException = ex;
                 throw ex;
             } finally {
-                Evaluation      eval = context.popEvaluation();
+                Evaluation eval = context.popEvaluation();
 
                 eval.setResult(result);
                 if (evalException != null) {
@@ -211,16 +213,17 @@ public abstract class SimpleNode implements Node, Serializable
         }
     }
 
-      /** Subclasses implement this method to do the actual work of extracting the
-          appropriate value from the source object. */
-    protected abstract Object getValueBody( OgnlContext context, Object source ) throws OgnlException;
+    /**
+     * Subclasses implement this method to do the actual work of extracting the
+     * appropriate value from the source object.
+     */
+    protected abstract Object getValueBody(OgnlContext context, Object source) throws OgnlException;
 
-    public final void setValue( OgnlContext context, Object target, Object value ) throws OgnlException
-    {
+    public final void setValue(OgnlContext context, Object target, Object value) throws OgnlException {
         if (context.getTraceEvaluations()) {
-            EvaluationPool      pool = OgnlRuntime.getEvaluationPool();
-            Throwable           evalException = null;
-            Evaluation          evaluation = pool.create(this, target, true);
+            EvaluationPool pool = OgnlRuntime.getEvaluationPool();
+            Throwable evalException = null;
+            Evaluation evaluation = pool.create(this, target, true);
 
             context.pushEvaluation(evaluation);
             try {
@@ -233,7 +236,7 @@ public abstract class SimpleNode implements Node, Serializable
                 evalException = ex;
                 throw ex;
             } finally {
-                Evaluation      eval = context.popEvaluation();
+                Evaluation eval = context.popEvaluation();
 
                 if (evalException != null) {
                     eval.setException(evalException);
@@ -247,79 +250,72 @@ public abstract class SimpleNode implements Node, Serializable
         }
     }
 
-    /** Subclasses implement this method to do the actual work of setting the
-        appropriate value in the target object.  The default implementation
-        throws an <code>InappropriateExpressionException</code>, meaning that it
-        cannot be a set expression.
+    /**
+     * Subclasses implement this method to do the actual work of setting the
+     * appropriate value in the target object.  The default implementation
+     * throws an <code>InappropriateExpressionException</code>, meaning that it
+     * cannot be a set expression.
      */
-    protected void setValueBody( OgnlContext context, Object target, Object value ) throws OgnlException
-    {
-        throw new InappropriateExpressionException( this );
+    protected void setValueBody(OgnlContext context, Object target, Object value) throws OgnlException {
+        throw new InappropriateExpressionException(this);
     }
 
     /**
-        Returns true iff this node is constant without respect to the children.
+     * Returns true iff this node is constant without respect to the children.
      */
-    public boolean isNodeConstant( OgnlContext context ) throws OgnlException
-    {
+    public boolean isNodeConstant(OgnlContext context) throws OgnlException {
         return false;
     }
 
-    public boolean isConstant( OgnlContext context ) throws OgnlException
-    {
+    public boolean isConstant(OgnlContext context) throws OgnlException {
         return isNodeConstant(context);
     }
 
-    public boolean isNodeSimpleProperty( OgnlContext context ) throws OgnlException
-    {
+    public boolean isNodeSimpleProperty(OgnlContext context) throws OgnlException {
         return false;
     }
 
-    public boolean isSimpleProperty( OgnlContext context ) throws OgnlException
-    {
+    public boolean isSimpleProperty(OgnlContext context) throws OgnlException {
         return isNodeSimpleProperty(context);
     }
 
-    public boolean isSimpleNavigationChain( OgnlContext context ) throws OgnlException
-    {
+    public boolean isSimpleNavigationChain(OgnlContext context) throws OgnlException {
         return isSimpleProperty(context);
     }
 
-      /** This method may be called from subclasses' jjtClose methods.  It flattens the
-          tree under this node by eliminating any children that are of the same class as
-          this node and copying their children to this node. */
-    protected void flattenTree()
-    {
+    /**
+     * This method may be called from subclasses' jjtClose methods.  It flattens the
+     * tree under this node by eliminating any children that are of the same class as
+     * this node and copying their children to this node.
+     */
+    protected void flattenTree() {
         boolean shouldFlatten = false;
         int newSize = 0;
 
-        for ( int i=0; i < children.length; ++i )
-            if ( children[i].getClass() == getClass() ) {
+        for (int i = 0; i < children.length; ++i)
+            if (children[i].getClass() == getClass()) {
                 shouldFlatten = true;
                 newSize += children[i].jjtGetNumChildren();
-            }
-            else
+            } else
                 ++newSize;
 
-        if ( shouldFlatten )
-          {
+        if (shouldFlatten) {
             Node[] newChildren = new Node[newSize];
             int j = 0;
 
-            for ( int i=0; i < children.length; ++i ) {
+            for (int i = 0; i < children.length; ++i) {
                 Node c = children[i];
-                if ( c.getClass() == getClass() ) {
-                    for ( int k=0; k < c.jjtGetNumChildren(); ++k )
+                if (c.getClass() == getClass()) {
+                    for (int k = 0; k < c.jjtGetNumChildren(); ++k)
                         newChildren[j++] = c.jjtGetChild(k);
-                }
-                else
+                } else
                     newChildren[j++] = c;
             }
 
-            if ( j != newSize )
-                throw new Error( "Assertion error: " + j + " != " + newSize );
+            if (j != newSize)
+                throw new Error("Assertion error: " + j + " != " + newSize);
 
             this.children = newChildren;
-          }
+        }
     }
 }
